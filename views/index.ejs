@@ -1,0 +1,46 @@
+<html>
+<head>
+</head>
+<body>
+	<h2>Title</h2>
+	<% if (!turnedIn) { %>
+		<form action="/" method="post">
+			<input type="hidden" name="questionsData" value='<%= JSON.stringify(questions) %>'>
+			<% questions.forEach(function(question) { %>
+				<p><%= question.Question %></p>
+				<ul>
+					<% question.QuestionAnswers.forEach(function(answer) { %>
+					<li>
+						<input type="radio" name="<%= question._id %>" value="<%= answer._id %>">
+						<%= answer.Answer %>
+					</li>
+					<% }) %>
+				</ul>
+			<% }) %>
+			<button type="submit">Submit Quiz</button>
+		</form>
+	<% } else { %>
+		<% feedback.forEach(function(fb) { %>
+			<p><%= fb.questions %></p>
+			<ul>
+				<% fb.answers.forEach(function(answer) { %>
+					<li class="<%= answer.isCorrect ? 'correct' : (answer.userAnswerId === fb.correctAnswerId ? 'incorrect' : '') %>">
+						<%= answer.Answer %> 
+						<% if (answer.userAnswerId === answer._id.toString()) { %>
+							(Your Answer)
+						<% } %>
+						<% if (answer.Correct) { %>
+							(Correct Answer)
+						<% } %>
+					</li>
+				<% }) %>
+			</ul>
+		<% }) %>
+		<p>Your score: <%= score %> / <%= questions.length %></p>
+	<% } %>
+
+	<button onclick="window.location.href='/addQuestion'">Add New Question</button>
+	<button onclick="window.location.href='/'">New Quesitons</button>
+
+</body>
+</html>
