@@ -1,23 +1,21 @@
-// app.js
+// Import libraries and controller
 const express = require("express");
 const bodyParser = require("body-parser");
-const uiRoutes = require("./ui");
-const { connectDB } = require("./database");
-
-const app = express();
+const quizController = require("./quizController");
 
 // App setup
+const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-// Connect to the database
-connectDB();
-
-// Use the routes module for handling all routes
-app.use("/", uiRoutes);
+// Routes
+app.get("/", quizController.displayQuizPage);
+app.post("/", quizController.handleQuizSubmission);
+app.get("/addQuestion", quizController.displayAddQuestionPage);
+app.post("/addQuestion", quizController.addNewQuestion);
 
 // Start the server
-app.listen(3000, () => {
-  console.log("Server started on port 3000");
+app.listen(3000, function() {
+    console.log("Server Started on port 3000");
 });
